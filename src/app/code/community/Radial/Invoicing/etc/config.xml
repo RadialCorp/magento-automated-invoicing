@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2013-2014 eBay Enterprise, Inc.
+
+NOTICE OF LICENSE
+
+This source file is subject to the Open Software License (OSL 3.0)
+that is bundled with this package in the file LICENSE.md.
+It is also available through the world-wide-web at this URL:
+http://opensource.org/licenses/osl-3.0.php
+
+@copyright   Copyright (c) 2013-2014 eBay Enterprise, Inc. (http://www.ebayenterprise.com/)
+@license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+-->
+<config>
+    <modules>
+        <Radial_Invoicing>
+            <version>1.0.0</version>
+        </Radial_Invoicing>
+    </modules>
+    <frontend>
+        <translate>
+            <modules>
+                <Radial_Invoicing>
+                    <files>
+                        <default>Radial_Invoicing.csv</default>
+                    </files>
+                </Radial_Invoicing>
+            </modules>
+        </translate>
+    </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Radial_Invoicing>
+                    <files>
+                        <default>Radial_Invoicing.csv</default>
+                    </files>
+                </Radial_Invoicing>
+            </modules>
+        </translate>
+    </adminhtml>
+    <global>
+        <models>
+            <radial_invoicing>
+                <class>Radial_Invoicing_Model</class>
+            </radial_invoicing>
+        </models>
+        <helpers>
+            <radial_invoicing>
+                <class>Radial_Invoicing_Helper</class>
+            </radial_invoicing>
+        </helpers>
+        <events>
+            <radial_eb2cfraud_dispatch_fraud_accept>
+                <observers>
+                    <radial_invoicing_handle_fraud_accept>
+                        <type>model</type>
+                        <class>radial_transactions/observer</class>
+                        <method>handleFraudAccept</method>
+                    </radial_invoicing_handle_fraud_accept>
+                </observers>
+            </radial_eb2cfraud_dispatch_fraud_accept>
+            <sales_order_shipment_save_after>
+                <observers>
+                    <radial_invoicing_handle_shipment_save>
+                        <type>model</type>
+                        <class>radial_transactions/observer</class>
+                        <method>handleShipmentSave</method>
+                    </radial_invoicing_handle_shipment_save>
+                </observers>
+            </sales_order_shipment_save_after>
+        </events>
+        <resources>
+            <radial_invoicing_setup>
+                <setup>
+                    <module>Radial_Invoicing</module>
+                    <class>Mage_Sales_Model_Resource_Setup</class>
+                </setup>
+            </radial_invoicing_setup>
+        </resources>
+    </global>
+</config>

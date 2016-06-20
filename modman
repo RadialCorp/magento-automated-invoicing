@@ -1,0 +1,6 @@
+# Core
+src/app/code/community/Radial/* app/code/community/Radial/
+src/app/etc/modules/*.xml app/etc/modules/
+
+# Locale
+src/app/locale/en_US/Radial_Invoicing.csv app/locale/en_US/Radial_Invoicing.csv
