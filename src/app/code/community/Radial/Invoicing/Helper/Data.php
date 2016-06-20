@@ -65,6 +65,36 @@ class Radial_Invoicing_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Create an invoice from the shipment
+     * @param Mage_Sales_Model_Order_Shipment
+     * @return Mage_Sales_Model_Order_Invoice
+     */
+    public function createInvoiceFromShipment(Mage_Sales_Model_Order_Shipment $shipment)
+    {
+        $order = $shipment->getOrder();
+        /** @var Mage_Sales_Model_Service_Order $orderService */
+        $orderService = Mage::getModel('sales/service_order', $order);
+        $invoice = $orderService->prepareInvoice();
+        $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::NOT_CAPTURE);
+        $invoice->register();
+        return $invoice;
+    }
+
+    /**
+     * Process the invoice
+     * @param Mage_Sales_Model_Order_Invoice
+     * @return bool
+     */
+    public function processInvoice(Mage_Sales_Model_Order_Invoice $invoice)
+    {
+        $order = $invoice->getOrder();
+        $payment = $order->getPayment();
+        $payment->getMethodInstance()
+            ->processInvoice($invoice, $payment);
+        return $this;
+    }
+
+    /**
      * @param string
      * @return float
      */

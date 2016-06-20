@@ -23,7 +23,7 @@ $status = Mage::getModel('sales/order_status');
 
 // Add a new status
 $status->setStatus(Radial_Invoicing_Model_Order::STATUS_READY_CODE)
-    ->setLabel(Mage::helper('core')->__(Radial_Invoicing_Model_Order::STATUS_READY_LABEL))
+    ->setLabel('Ready to Ship')
     ->assignState(Mage_Sales_Model_Order::STATE_PROCESSING)
     ->save();
 

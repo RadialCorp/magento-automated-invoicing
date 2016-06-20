@@ -61,10 +61,13 @@ class Radial_Invoicing_Model_Observer
         $this->helper->setOrderReadyToShip($order);
     }
 
+    /**
+     * @param Varien_Event_Observer $observer
+     */
     public function handleShipmentSave(Varien_Event_Observer $observer)
     {
         $shipment = $observer->getEvent()->getShipment();
-        $order = $shipment->getOrder();
-        // todo create invoice from shipment
+        $invoice = $this->helper->createInvoiceFromShipment($shipment);
+        $this->helper->processInvoice($invoice);
     }
 }
