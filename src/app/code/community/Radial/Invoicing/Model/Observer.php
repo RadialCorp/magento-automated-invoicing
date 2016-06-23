@@ -67,7 +67,6 @@ class Radial_Invoicing_Model_Observer
     public function handleShipmentSave(Varien_Event_Observer $observer)
     {
         $shipment = $observer->getEvent()->getShipment();
-	$order = $shipment->getOrder();
         $invoice = $this->helper->createInvoiceFromShipment($shipment);
         $this->helper->processInvoice($invoice);
     }
