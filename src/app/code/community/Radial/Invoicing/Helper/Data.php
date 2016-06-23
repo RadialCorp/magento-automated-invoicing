@@ -86,7 +86,7 @@ class Radial_Invoicing_Helper_Data extends Mage_Core_Helper_Abstract
         $invoice = $orderService->prepareInvoice($savedQtys);
         
 	$invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::NOT_CAPTURE);
-        $invoice->register()->capture();
+        $invoice->register();
 
 	$transactionSave = Mage::getModel('core/resource_transaction')
     				->addObject($invoice)
