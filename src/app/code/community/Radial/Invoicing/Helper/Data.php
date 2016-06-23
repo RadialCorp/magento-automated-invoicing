@@ -47,6 +47,7 @@ class Radial_Invoicing_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $orderTime = strtotime($order->getCreatedAtDate());
         $elapsedTime = $this->getElapsedTimeInHours($orderTime);
+
         return $elapsedTime >= $this->config->reconfirmAge;
     }
 
@@ -73,10 +74,26 @@ class Radial_Invoicing_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $order = $shipment->getOrder();
         /** @var Mage_Sales_Model_Service_Order $orderService */
+
+	$savedQtys = array();
+
+	foreach( $shipment->getAllItems() as $shipItem )
+	{
+		$savedQtys[$shipItem->getOrderItemId()] = $shipItem->getQty();
+	}
+
         $orderService = Mage::getModel('sales/service_order', $order);
-        $invoice = $orderService->prepareInvoice();
-        $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::NOT_CAPTURE);
-        $invoice->register();
+        $invoice = $orderService->prepareInvoice($savedQtys);
+        
+	$invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::NOT_CAPTURE);
+        $invoice->register()->capture();
+
+	$transactionSave = Mage::getModel('core/resource_transaction')
+    				->addObject($invoice)
+    				->addObject($invoice->getOrder());
+
+	$transactionSave->save();
+
         return $invoice;
     }
 

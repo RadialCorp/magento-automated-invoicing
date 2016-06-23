@@ -56,7 +56,7 @@ http://opensource.org/licenses/osl-3.0.php
                 <observers>
                     <radial_invoicing_handle_fraud_accept>
                         <type>model</type>
-                        <class>radial_transactions/observer</class>
+                        <class>radial_invoicing/observer</class>
                         <method>handleFraudAccept</method>
                     </radial_invoicing_handle_fraud_accept>
                 </observers>
@@ -65,7 +65,7 @@ http://opensource.org/licenses/osl-3.0.php
                 <observers>
                     <radial_invoicing_handle_shipment_save>
                         <type>model</type>
-                        <class>radial_transactions/observer</class>
+                        <class>radial_invoicing/observer</class>
                         <method>handleShipmentSave</method>
                     </radial_invoicing_handle_shipment_save>
                 </observers>
