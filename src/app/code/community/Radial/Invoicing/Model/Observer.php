@@ -68,6 +68,5 @@ class Radial_Invoicing_Model_Observer
     {
         $shipment = $observer->getEvent()->getShipment();
         $invoice = $this->helper->createInvoiceFromShipment($shipment);
-        $this->helper->processInvoice($invoice);
     }
 }
