@@ -73,28 +73,33 @@ class Radial_Invoicing_Helper_Data extends Mage_Core_Helper_Abstract
     public function createInvoiceFromShipment(Mage_Sales_Model_Order_Shipment $shipment)
     {
         $order = $shipment->getOrder();
-        /** @var Mage_Sales_Model_Service_Order $orderService */
 
-	$savedQtys = array();
-
-	foreach( $shipment->getAllItems() as $shipItem )
+	if( $order->getTotalDue() > 0 )
 	{
-		$savedQtys[$shipItem->getOrderItemId()] = $shipItem->getQty();
-	}
+		$savedQtys = array();
 
-        $orderService = Mage::getModel('sales/service_order', $order);
-        $invoice = $orderService->prepareInvoice($savedQtys);
+		foreach( $shipment->getAllItems() as $shipItem )
+		{
+			$savedQtys[$shipItem->getOrderItemId()] = $shipItem->getQty();
+		}
+
+		/** @var Mage_Sales_Model_Service_Order $orderService */
+        	$orderService = Mage::getModel('sales/service_order', $order);
+        	$invoice = $orderService->prepareInvoice($savedQtys);
         
-	$invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::NOT_CAPTURE);
-        $invoice->register()->capture();
+		$invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::NOT_CAPTURE);
+        	$invoice->register()->capture();
 
-	$transactionSave = Mage::getModel('core/resource_transaction')
+		$transactionSave = Mage::getModel('core/resource_transaction')
     				->addObject($invoice)
     				->addObject($invoice->getOrder());
 
-	$transactionSave->save();
+		$transactionSave->save();
 
-        return $invoice;
+        	return $invoice;
+	}
+
+	return null;
     }
 
     /**
