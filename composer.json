@@ -12,7 +12,7 @@
   "require": {
     "php": ">=5.4.0",
     "radial/magento-payments": "~1.0.0",
-    "radial/magento-fraud-risk": "~1.0.0"
+    "radial/magento-fraud-risk": "~1.1"
   },
   "require-dev": {
     "ecomdev/ecomdev_phpunit": ">=0.3",
