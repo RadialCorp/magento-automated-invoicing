@@ -76,16 +76,21 @@ class Radial_Invoicing_Helper_Data extends Mage_Core_Helper_Abstract
 
 	if( $order->getTotalDue() > 0 )
 	{
-		$savedQtys = array();
+		$orderItemArray = array();
 
-		foreach( $shipment->getAllItems() as $shipItem )
-		{
-			$savedQtys[$shipItem->getOrderItemId()] = $shipItem->getQty();
-		}
+                foreach( $order->getAllItems() as $orderItem )
+                {
+                        $orderItemArray[$orderItem->getId()] = 0;
+                }
+
+                foreach( $shipment->getAllItems() as $shipItem )
+                {
+                        $orderItemArray[$shipItem->getOrderItemId()] = $shipItem->getQty();
+                }
 
 		/** @var Mage_Sales_Model_Service_Order $orderService */
         	$orderService = Mage::getModel('sales/service_order', $order);
-        	$invoice = $orderService->prepareInvoice($savedQtys);
+        	$invoice = $orderService->prepareInvoice($orderItemArray);
         
 		$invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::NOT_CAPTURE);
         	$invoice->register()->capture();
