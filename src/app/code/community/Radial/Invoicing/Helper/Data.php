@@ -35,7 +35,7 @@ class Radial_Invoicing_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $payment = $order->getPayment();
         $payment->getMethodInstance()
-            ->capture($payment, $order->getBaseGrandTotal());
+            ->capture($payment, $payment->getAmountAuthorized());
     }
 
     /**
