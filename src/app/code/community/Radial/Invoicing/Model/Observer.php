@@ -66,11 +66,34 @@ class Radial_Invoicing_Model_Observer
      */
     public function handleShipmentSave(Varien_Event_Observer $observer)
     {
-	$shipment = $observer->getEvent()->getShipment();
+    	$shipment = $observer->getEvent()->getShipment();
+        $order = $shipment->getOrder();
 
-	if ($shipment->getUpdatedAt() == $shipment->getCreatedAt()) 
-	{
-        	$invoice = $this->helper->createInvoiceFromShipment($shipment);
-	}
+        $invoice = false;
+        $orderItemIds = array();
+        foreach( $shipment->getAllItems() as $shipItem )
+        {
+                $orderItemIds[] = $shipItem->getOrderItemId();
+        }
+
+        $orderItems = Mage::getModel('sales/order_item')->getCollection()
+                                    ->addFieldToFilter('item_id', array('in' => $orderItemIds))
+                                    ->addFieldToFilter('order_id', array('eq' => $order->getId()));
+
+        foreach( $orderItems as $orderItem )
+        {
+                $qtyInvoiced = $orderItem->getQtyInvoiced();
+                $qtyShipped = $orderItem->getQtyShipped();
+
+                if( $qtyInvoiced < $qtyShipped )
+                {
+                        $invoice = true;
+                }
+        }
+
+        if ($shipment->getUpdatedAt() == $shipment->getCreatedAt() && $invoice )
+        {
+                $invoice = $this->helper->createInvoiceFromShipment($shipment);
+        }
     }
 }
